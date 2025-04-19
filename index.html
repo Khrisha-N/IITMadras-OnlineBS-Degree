@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Portal Login</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-box {
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 400px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #800000;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .captcha-box {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    #captchaText {
+      font-weight: bold;
+      color: red;
+      font-size: 18px;
+      margin-left: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #800000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Student Portal</h2>
+    <form onsubmit="return validateCaptcha(event)">
+      <label for="email">Student Email ID</label>
+      <input type="email" id="email" name="email" placeholder="name@iitm.ac.in" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+
+      <label for="captchaInput">Captcha</label>
+      <div class="captcha-box">
+        <input type="text" id="captchaInput" placeholder="Enter Captcha" required>
+        <span id="captchaText"></span>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+    let generatedCaptcha = "";
+
+    function generateCaptcha() {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      generatedCaptcha = "";
+      for (let i = 0; i < 6; i++) {
+        generatedCaptcha += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      document.getElementById("captchaText").textContent = generatedCaptcha;
+    }
+
+    function validateCaptcha(event) {
+      event.preventDefault(); // Prevent form from submitting
+
+      const enteredCaptcha = document.getElementById("captchaInput").value;
+      if (enteredCaptcha === generatedCaptcha) {
+        // ✅ Save login state
+        localStorage.setItem("isLoggedIn", "true");
+
+        // Redirect to dashboard
+        window.location.href = "dashboard.html";
+      } else {
+        alert("Captcha does not match. Please try again.");
+        generateCaptcha();
+      }
+    }
+
+    window.onload = generateCaptcha;
+  </script>
+
+</body>
+</html>
